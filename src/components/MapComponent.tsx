@@ -36,50 +36,56 @@ interface MapComponentProps {
 }
 
 const data = {
-	summer: [
-		{
-			name: 'Якутск',
-			value: 62,
-			max: 500,
-		},
-		{
-			name: 'Тикси',
-			value: 38,
-			max: 500,
-		},
-		{
-			name: 'Экспорт',
-			value: 375,
-			max: 500,
-		},
-		{
-			name: 'Соседние\nрегионы',
-			value: 38,
-			max: 500,
-		},
-	],
-	winter: [
-		{
-			name: 'Якутск',
-			value: 432,
-			max: 500,
-		},
-		{
-			name: 'Тикси',
-			value: 63,
-			max: 500,
-		},
-		{
-			name: 'Экспорт',
-			value: 0,
-			max: 500,
-		},
-		{
-			name: 'Соседние\nрегионы',
-			value: 46,
-			max: 500,
-		},
-	],
+	summer: {
+		value: 513,
+		data: [
+			{
+				name: 'Якутск',
+				value: 62,
+				max: 500,
+			},
+			{
+				name: 'Тикси',
+				value: 38,
+				max: 500,
+			},
+			{
+				name: 'Экспорт',
+				value: 375,
+				max: 500,
+			},
+			{
+				name: 'Соседние\nрегионы',
+				value: 38,
+				max: 500,
+			},
+		],
+	},
+	winter: {
+		value: 541,
+		data: [
+			{
+				name: 'Якутск',
+				value: 432,
+				max: 500,
+			},
+			{
+				name: 'Тикси',
+				value: 63,
+				max: 500,
+			},
+			{
+				name: 'Экспорт',
+				value: 0,
+				max: 500,
+			},
+			{
+				name: 'Соседние\nрегионы',
+				value: 46,
+				max: 500,
+			},
+		],
+	},
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({ routes, isWinter }) => {
@@ -98,7 +104,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ routes, isWinter }) => {
 					url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 				/>
 
-				{routes.map(route => (
+				{routes.map((route) => (
 					<React.Fragment key={route.id}>
 						{route.points.length > 1 && (
 							<Polyline
@@ -161,7 +167,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ routes, isWinter }) => {
 					}}
 				></div>
 				<RadarChart
-					data={data[isWinter ? 'winter' : 'summer']}
+					data={data[isWinter ? 'winter' : 'summer'].data}
 					style={{
 						height: '500px',
 						width: '100%',
@@ -190,7 +196,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ routes, isWinter }) => {
 							fill='#11DDA8'
 						/>
 					</svg>
-					513 млн. руб/мес
+					<span>{data[isWinter ? 'winter' : 'summer'].value}</span> млн. руб/мес
 				</span>
 				<div
 					style={{
@@ -202,7 +208,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ routes, isWinter }) => {
 						padding: '25px',
 					}}
 				>
-					{data[isWinter ? 'winter' : 'summer'].map(item => (
+					{data[isWinter ? 'winter' : 'summer'].data.map((item) => (
 						<p
 							style={{
 								display: 'flex',
@@ -216,8 +222,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ routes, isWinter }) => {
 							<span>{item.name}</span>
 							<span>
 								{Math.max(
-									...data[isWinter ? 'winter' : 'summer'].map(
-										item => item.value
+									...data[isWinter ? 'winter' : 'summer'].data.map(
+										(item) => item.value
 									)
 								) === item.value ? (
 									<span style={{ color: '#11DDA8' }}>{item.value}</span>

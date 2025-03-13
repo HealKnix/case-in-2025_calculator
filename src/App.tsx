@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react'
+import MapComponent from './components/MapComponent'
+import { Switch } from './components/ui/switch'
+import { Label } from './components/ui/label'
+import summerRoutes from './data/summer-routes.json'
+import winterRoutes from './data/winter-routes.json'
+import './index.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+	const [isWinter, setIsWinter] = useState(false)
+	const [routes, setRoutes] = useState(summerRoutes)
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	useEffect(() => {
+		// Update routes based on selected season
+		setRoutes(isWinter ? winterRoutes : summerRoutes)
+	}, [isWinter])
+
+	return (
+		<div className='min-h-screen p-4 flex flex-col'>
+			<header className='mb-4'>
+				<h1 className='text-2xl font-bold mb-4'>Интерактивная карта</h1>
+				<div className='flex items-center space-x-2'>
+					<Switch
+						id='season-mode'
+						checked={isWinter}
+						onCheckedChange={setIsWinter}
+					/>
+					<Label htmlFor='season-mode'>
+						{isWinter ? 'Зимний режим' : 'Летний режим'}
+					</Label>
+				</div>
+			</header>
+			<main className='flex-1 border rounded-lg overflow-hidden'>
+				<MapComponent routes={routes} isWinter={isWinter} />
+			</main>
+			<footer className='mt-4 text-sm text-gray-500'>
+				© {new Date().getFullYear()} Oilfans simulator
+			</footer>
+		</div>
+	)
 }
 
 export default App
